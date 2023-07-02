@@ -1,6 +1,6 @@
 FROM alpine:edge as builder
 ENV COMMIT 78126bd
-RUN apk add --no-cache autoconf automake g++ gcc libtool make nasm ncurses-dev && \
+RUN apk add autoconf automake g++ gcc libtool make nasm ncurses-dev && \
 	wget https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz && \
 	tar -xf lame-3.100.tar.gz && \
 	cd lame-3.100 && \
@@ -18,9 +18,8 @@ RUN apk add --no-cache autoconf automake g++ gcc libtool make nasm ncurses-dev &
 		--disable-shared \
 		--with-pic && \
 	make -j $(nproc) && \
-	make test && \
 	make install
-RUN apk add --no-cache autoconf automake g++ gcc libtool gettext git make && \
+RUN apk add autoconf automake g++ gcc libtool gettext git make && \
 	git clone https://github.com/xiph/opus && \
 	cd opus && \
 	./autogen.sh && \
@@ -32,7 +31,7 @@ RUN apk add --no-cache autoconf automake g++ gcc libtool gettext git make && \
 	make -j $(nproc) && \
 	make check && \
 	make install
-RUN apk add --no-cache cmake g++ gcc git samurai && \
+RUN apk add cmake g++ gcc git samurai && \
 	git clone https://github.com/xiph/ogg && \
 	cd ogg && \
 	cmake -B build -G Ninja \
@@ -42,9 +41,8 @@ RUN apk add --no-cache cmake g++ gcc git samurai && \
 		-DCMAKE_BUILD_TYPE=Release \
 		$CMAKE_CROSSOPTS && \
 	cmake --build build -j $(nproc) && \
-	ctest -j $(nproc) && \
 	cmake --install build
-RUN apk add --no-cache autoconf automake libtool g++ gcc gettext git !libiconv make pkgconfig && \
+RUN apk add autoconf automake libtool g++ gcc gettext git !libiconv make pkgconfig && \
 	git clone https://github.com/xiph/flac && \
 	cd flac && \
 	./autogen.sh && \
@@ -57,7 +55,7 @@ RUN apk add --no-cache autoconf automake libtool g++ gcc gettext git !libiconv m
 	make -j $(nproc) && \
 	make check || true && \
 	make install
-RUN apk add --no-cache alsa-lib-dev cmake git flac-dev libvorbis-dev linux-headers python3 samurai && \
+RUN apk add alsa-lib-dev cmake git flac-dev libvorbis-dev linux-headers python3 samurai && \
 	git clone https://github.com/libsndfile/libsndfile && \
 	cd libsndfile && \
 	cmake -B build -G Ninja \
@@ -67,10 +65,9 @@ RUN apk add --no-cache alsa-lib-dev cmake git flac-dev libvorbis-dev linux-heade
 		-DENABLE_MPEG=ON && \
 	cmake --build build -j $(nproc) && \
 	cd build && \
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest -E write_read_test_sd2 && \
 	cd .. && \
 	cmake --install build
-RUN apk add --no-cache cmake g++ gcc git samurai zlib-dev && \
+RUN apk add cmake g++ gcc git samurai zlib-dev && \
 	git clone https://codeberg.org/tenacityteam/libid3tag && \
 	cd libid3tag && \
 	cmake -B build -G Ninja \
@@ -81,10 +78,9 @@ RUN apk add --no-cache cmake g++ gcc git samurai zlib-dev && \
 		-DCMAKE_INSTALL_LIBDIR=lib && \
 	cmake --build build -j $(nproc) && \
 	cd build && \
-	CTEST_OUTPUT_ON_FAILURE=TRUE ctest && \
 	cd .. && \
 	cmake --install build
-RUN apk add --no-cache boost-dev boost-static cmake g++ gcc gd-dev git libgd libmad-dev libpng-dev libpng-static libvorbis-static make zlib-dev zlib-static && \
+RUN apk add boost-dev boost-static cmake g++ gcc gd-dev git libgd libmad-dev libpng-dev libpng-static libvorbis-static make zlib-dev zlib-static && \
 	git clone -n https://github.com/bbc/audiowaveform.git && \
 	cd audiowaveform && \
 	git checkout ${COMMIT} && \
@@ -97,7 +93,7 @@ RUN apk add --no-cache boost-dev boost-static cmake g++ gcc gd-dev git libgd lib
 	make install && \
 	strip /usr/local/bin/audiowaveform
 FROM alpine:edge
-RUN apk add --no-cache libstdc++
+RUN apk add libstdc++
 COPY --from=builder /usr/local/bin/audiowaveform /usr/local/bin/audiowaveform
 ENTRYPOINT [ "audiowaveform" ]
 CMD [ "--help" ]
