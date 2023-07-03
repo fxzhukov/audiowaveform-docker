@@ -1,5 +1,5 @@
 FROM alpine:edge as builder
-ENV COMMIT 78126bd
+ENV COMMIT 4f85cb9
 RUN apk add autoconf automake g++ gcc libtool make nasm ncurses-dev && \
 	wget https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz && \
 	tar -xf lame-3.100.tar.gz && \
@@ -66,7 +66,7 @@ RUN apk add alsa-lib-dev cmake git flac-dev libvorbis-dev linux-headers python3 
 	cd .. && \
 	cmake --install build
 RUN apk add cmake g++ gcc git samurai zlib-dev && \
-	git clone https://codeberg.org/tenacityteam/libid3tag && \
+	git clone https://github.com/tenacityteam/libid3tag && \
 	cd libid3tag && \
 	cmake -B build -G Ninja \
 		-DBUILD_SHARED_LIBS=OFF \
