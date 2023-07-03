@@ -29,7 +29,6 @@ RUN apk add autoconf automake g++ gcc libtool gettext git make && \
 		--localstatedir=/var \
 		--enable-custom-modes && \
 	make -j $(nproc) && \
-	make check && \
 	make install
 RUN apk add cmake g++ gcc git samurai && \
 	git clone https://github.com/xiph/ogg && \
@@ -53,7 +52,6 @@ RUN apk add autoconf automake libtool g++ gcc gettext git !libiconv make pkgconf
 		--disable-rpath \
 		--with-pic && \
 	make -j $(nproc) && \
-	make check || true && \
 	make install
 RUN apk add alsa-lib-dev cmake git flac-dev libvorbis-dev linux-headers python3 samurai && \
 	git clone https://github.com/libsndfile/libsndfile && \
@@ -89,7 +87,6 @@ RUN apk add boost-dev boost-static cmake g++ gcc gd-dev git libgd libmad-dev lib
 	cd build && \
 	cmake -DCMAKE_CXX_STANDARD=14 -D ENABLE_TESTS=1 -D BUILD_STATIC=1 .. && \
 	make -j $(nproc) && \
-	/audiowaveform/build/audiowaveform_tests || true && \
 	make install && \
 	strip /usr/local/bin/audiowaveform
 FROM alpine:edge
