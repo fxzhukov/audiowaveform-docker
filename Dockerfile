@@ -1,4 +1,4 @@
-FROM alpine:latest as builder
+FROM alpine:slim as builder
 ENV COMMIT 4f85cb9
 RUN apk add autoconf automake g++ gcc libtool make nasm ncurses-dev && \
 	wget https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz && \
@@ -89,7 +89,7 @@ RUN apk add boost-dev boost-static cmake g++ gcc gd-dev git libgd libmad-dev lib
 	make -j $(nproc) && \
 	make install && \
 	strip /usr/local/bin/audiowaveform
-FROM alpine:latest
+FROM alpine:slim
 RUN apk add libstdc++
 COPY --from=builder /usr/local/bin/audiowaveform /usr/local/bin/audiowaveform
 ENTRYPOINT [ "audiowaveform" ]
